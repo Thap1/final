@@ -17,7 +17,7 @@ import entity.Candidate;
 import entity.Recruitment;
 
 import utils.ConnectDB;
-import utils.DBUtils;
+
 
 
 
@@ -28,9 +28,8 @@ import utils.DBUtils;
 public class RecruitmentDAL {
     static Logger log = Logger.getLogger(RecruitmentDAL.class);
     public List<Recruitment> getAllRecruitment() {
-        ConnectDB connectDB = new ConnectDB();
-        DBUtils dbUtils = null;
-        Connection conn = connectDB.connect();
+        
+        Connection conn = ConnectDB.connect();
         List<Recruitment> listRecruitments = new ArrayList<>();
         Statement statement = null;
         ResultSet resultSet = null;
@@ -51,48 +50,53 @@ public class RecruitmentDAL {
             log.error("Loi ko lay duoc list recruitment");
             e.printStackTrace();
         } finally {
-            dbUtils.closeResultSet(resultSet);
-            dbUtils.closeStatement(statement);
-            dbUtils.closeConnection(conn);
+        	try {
+				conn.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+
         }
         return listRecruitments;
 
     }
 
     public Recruitment findRecruitmentByID(int id) {
-        ConnectDB connectDB = new ConnectDB();
-        DBUtils dbUtils = null;
-        Connection conn = connectDB.connect();
+        Connection conn = ConnectDB.connect();
         ResultSet resultSet = null;
-        Recruitment recruiment = null;
+        Recruitment recruitment = null;
         PreparedStatement preparedStatement = null;
-        String sql = "select Amount from Recruitment where RecruitmentCode = ?";
+        String sql = "select * from Recruitment where RecruitmentCode = ?;";
         try {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int amount = resultSet.getInt("Amount");
-                recruiment = new Recruitment();
-                recruiment.setAmount(amount);
+                recruitment = new Recruitment();
+                recruitment.setRecruimentCode(resultSet.getInt(1));
+                recruitment.setPosition(resultSet.getString(2));
+                recruitment.setRecruitmentPackage(resultSet.getString(3));
+                recruitment.setAmount(resultSet.getInt(4));
             }
         } catch (SQLException e) {
             log.error("Loi ko lay duoc object recruitment");
         } finally {
-            dbUtils.closeResultSet(resultSet);
-            dbUtils.closePreparedStatement(preparedStatement);
-            dbUtils.closeConnection(conn);
+        	try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
         }
-        return recruiment;
+        return recruitment;
     }
 
     public boolean submitCandidateToRecruitment(Candidate candidate, Recruitment recruitment) {
-        ConnectDB connectDB = new ConnectDB();
-        DBUtils dbUtils = null;
-        Connection conn = connectDB.connect();
+        Connection conn = ConnectDB.connect();
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         int candidateType = candidate.getCandidateType();
         String recruitmentPackageMatching = "";
         if (candidateType == 0) {
@@ -103,23 +107,27 @@ public class RecruitmentDAL {
             recruitmentPackageMatching = "C";
         }
         if (recruitmentPackageMatching.equals(recruitment.getRecruitmentPackage())) {
-            String sql = "update Recruitment set Amount = ? where RecruitmentCode = ?";
+            String sql = "update Recruitment set Amount = ? where RecruitmentCode = ?;";
             try {
                 preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setInt(1, recruitment.getAmount() + 1);
                 preparedStatement.setInt(2, recruitment.getRecruimentCode());
                 preparedStatement.executeUpdate();
-                System.err.println("Submitted this candidate succesfully");
-
+                System.out.println("Submitted this candidate succesfully");
+                
             } catch (SQLException e) {
                 log.error("Loi khi update recruitment");
                 e.printStackTrace();
             } finally {
-                dbUtils.closeResultSet(resultSet);
-                dbUtils.closePreparedStatement(preparedStatement);
-                dbUtils.closeConnection(conn);
+            	try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         } else {
+        	System.out.println();
             System.err.println("This candidate is not matching");
         }
 

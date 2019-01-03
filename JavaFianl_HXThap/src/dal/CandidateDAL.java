@@ -15,22 +15,19 @@ import org.apache.log4j.Logger;
 
 import entity.Candidate;
 import utils.ConnectDB;
-import utils.DBUtils;
+
 
 /**
  * @author User
  *
  */
 public class CandidateDAL {
-    private ConnectDB connectDB;
-    private DBUtils dbUtils;
-
     static Logger log = Logger.getLogger(Candidate.class);
 
     public List<Candidate> getAllCandidate() {
-            connectDB = new ConnectDB();
-            dbUtils = new DBUtils();
-            Connection conn = connectDB.connect();
+            new ConnectDB();
+      
+            Connection conn = ConnectDB.connect();
             List<Candidate> listCandidates = new ArrayList<>();
             Statement statement = null;
             ResultSet resultSet = null;
@@ -59,18 +56,21 @@ public class CandidateDAL {
                     log.error("Loi hien thi danh sach candidate");
                     e.printStackTrace();
             } finally {
-                    dbUtils.closeResultSet(resultSet);
-                    dbUtils.closeStatement(statement);
-                    dbUtils.closeConnection(conn);
+                    try {
+						conn.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
             }
             return listCandidates;
 
     }
 
     public Candidate findCandidateByID(int id) {
-            connectDB = new ConnectDB();
-            dbUtils = new DBUtils();
-            Connection conn = connectDB.connect();
+            new ConnectDB();
+            
+            Connection conn = ConnectDB.connect();
             ResultSet resultSet = null;
             Candidate candidate = null;
             PreparedStatement preparedStatement = null;
@@ -89,9 +89,12 @@ public class CandidateDAL {
                     log.error("Loi tim candidate theo id");
                     e.printStackTrace();
             } finally {
-                    dbUtils.closeResultSet(resultSet);
-                    dbUtils.closePreparedStatement(preparedStatement);
-                    dbUtils.closeConnection(conn);
+                   try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
             }
 

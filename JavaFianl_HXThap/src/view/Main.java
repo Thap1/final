@@ -11,9 +11,15 @@ import org.apache.log4j.Logger;
 import bll.ExperienceBLL;
 import bll.FresherBLL;
 import bll.InternBLL;
+import dal.CandidateDAL;
+import dal.RecruitmentDAL;
+import entity.Candidate;
 import entity.ExperienceCandidate;
 import entity.FresherCandidate;
 import entity.InternCandidate;
+import entity.Recruitment;
+
+
 
 /**
  * @author User
@@ -30,6 +36,7 @@ public class Main {
     private static Scanner yn2;
     private static Scanner yn3;
     private static Scanner sc;
+	private static Scanner sc2;
     
     public static void main(String[] args) {
         
@@ -56,12 +63,14 @@ public class Main {
             System.out.println("1.Experience");
             System.out.println("2.Fresher");
             System.out.println("3.Intern");
-            System.out.println("4.Exit!");
+            System.out.println("4.Show All Recruitment");
+            System.out.println("5.Submit The Candidate To Recruitment");
+            System.out.println("6.Exit!");
             System.out.println("-----------");
             do {
                 System.out.println("Chọn chức năng : ");
                 chon = sc.nextInt();
-            } while (chon < 1 || chon > 4);
+            } while (chon < 1 || chon > 6);
             switch (chon) {
             case 1:
                 experience();
@@ -73,15 +82,48 @@ public class Main {
                 intern();
                 break;
             case 4:
+            	showAllRecruitment();
+                break;
+            case 5:
+                submitCandidateToRecruitment();
+                break;
+            case 6:
                 System.out.println("Đã Thoát !!!!!!");
                 System.exit(0);
                 break;
 
             }
-        } while (chon != 4);
+        } while (chon != 6);
     }
 
-    /**
+    private static void showAllRecruitment() {
+    	RecruitmentDAL recruitmentDAL = new RecruitmentDAL();
+        List<Recruitment> listRecruitments = recruitmentDAL.getAllRecruitment();
+        System.out.println("All recruitment");
+        for (Recruitment recruitment : listRecruitments) {
+                System.out.println(recruitment.toString());
+        }
+        System.out.println("------------------------");
+        showMenu();
+	}
+
+	private static void submitCandidateToRecruitment() {
+		RecruitmentDAL recruitmentDAL = new RecruitmentDAL();
+        CandidateDAL candidateDAL = new CandidateDAL();
+
+        sc2 = new Scanner(System.in);
+        System.out.println("Enter id candidate you want to apply:");
+        int id = Integer.parseInt(sc2.nextLine());
+        System.out.println("Enter id recruitment you want  to apply:");
+        int recruitmentCode = Integer.parseInt(sc2.nextLine());
+        Candidate candidate = candidateDAL.findCandidateByID(id);
+        Recruitment recruitment = recruitmentDAL.findRecruitmentByID(recruitmentCode);
+        recruitmentDAL.submitCandidateToRecruitment(candidate, recruitment);
+        System.out.println("------------------");
+        showMenu();
+	}
+
+	/**
      * Create by: HoangThap - CMC
      * Create date: Jan 3, 2019
      * Modifier: HoangThap
