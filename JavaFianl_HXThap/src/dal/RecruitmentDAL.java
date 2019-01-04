@@ -17,6 +17,7 @@ import entity.Candidate;
 import entity.Recruitment;
 
 import utils.ConnectDB;
+import utils.Constants;
 
 
 
@@ -34,10 +35,10 @@ public class RecruitmentDAL {
         Statement statement = null;
         ResultSet resultSet = null;
         Recruitment recruitment = null;
-        String sql = "SELECT * FROM nhansu.recruitment;";
+       
         try {
             statement = conn.createStatement();
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(Constants.Recruitment.SELECT_RE);
             while (resultSet.next()) {
                 int id = resultSet.getInt("RecruitmentCode");
                 String position = resultSet.getString("Position");
@@ -67,9 +68,9 @@ public class RecruitmentDAL {
         ResultSet resultSet = null;
         Recruitment recruitment = null;
         PreparedStatement preparedStatement = null;
-        String sql = "select * from Recruitment where RecruitmentCode = ?;";
+        
         try {
-            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement = conn.prepareStatement(Constants.Recruitment.SELECT_RE_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 
@@ -107,9 +108,8 @@ public class RecruitmentDAL {
             recruitmentPackageMatching = "C";
         }
         if (recruitmentPackageMatching.equals(recruitment.getRecruitmentPackage())) {
-            String sql = "update Recruitment set Amount = ? where RecruitmentCode = ?;";
             try {
-                preparedStatement = conn.prepareStatement(sql);
+                preparedStatement = conn.prepareStatement(Constants.Recruitment.UP_RE_CODE);
                 preparedStatement.setInt(1, recruitment.getAmount() + 1);
                 preparedStatement.setInt(2, recruitment.getRecruimentCode());
                 preparedStatement.executeUpdate();

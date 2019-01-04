@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import entity.FresherCandidate;
 import utils.ConnectDB;
+import utils.Constants;
 
 
 
@@ -76,9 +77,9 @@ public class FresherDAL implements InterfaceDAL<FresherCandidate> {
     public boolean insert(FresherCandidate object) {
 Connection cnn = ConnectDB.connect();
         
-        String sql = "INSERT INTO `nhansu`.`candidate` (`candidateID`, `firstName`, `lastName`, `birthDate`, `address`, `phone`, `email`, `candidateType`, `graduationDate`, `graduationRank`, `education`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        
         try {
-            PreparedStatement prepared = cnn.prepareStatement(sql);
+            PreparedStatement prepared = cnn.prepareStatement(Constants.FresherCandidate.INSERT_FRE);
             prepared.setInt(1, object.getCandidateID());
             prepared.setString(2, object.getFirstName());
             prepared.setString(3, object.getLastName());

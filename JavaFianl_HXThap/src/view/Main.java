@@ -18,6 +18,8 @@ import entity.ExperienceCandidate;
 import entity.FresherCandidate;
 import entity.InternCandidate;
 import entity.Recruitment;
+import utils.CheckValidation;
+import utils.Constants;
 
 
 
@@ -42,8 +44,8 @@ public class Main {
         
         log.info("Example info message ..");
        
-        System.out.println("Hệ Thống ... ");
-        System.out.println("=============");
+        System.out.println("==Hệ Thống Tuyển Dụng== ");
+        System.out.println("=======================");
         showMenu();
     }
 
@@ -59,14 +61,14 @@ public class Main {
         sc = new Scanner(System.in);
         int chon = 0;
         do {
-            System.out.println("Menu: ");
+            System.out.println("===== Menu: =======");
             System.out.println("1.Experience");
             System.out.println("2.Fresher");
             System.out.println("3.Intern");
-            System.out.println("4.Show All Recruitment");
-            System.out.println("5.Submit The Candidate To Recruitment");
+            System.out.println("4.Show Recruitment");
+            System.out.println("5.Submit Recruitment");
             System.out.println("6.Exit!");
-            System.out.println("-----------");
+            System.out.println("===================");
             do {
                 System.out.println("Chọn chức năng : ");
                 chon = sc.nextInt();
@@ -96,6 +98,14 @@ public class Main {
         } while (chon != 6);
     }
 
+    /**
+     * Create by: HoangThap - CMC
+     * Create date: Jan 4, 2019
+     * Modifier: HoangThap
+     * Modified date: Jan 4, 2019
+     * Description: showAllRecruitment
+     * Version 1.0
+     */
     private static void showAllRecruitment() {
     	RecruitmentDAL recruitmentDAL = new RecruitmentDAL();
         List<Recruitment> listRecruitments = recruitmentDAL.getAllRecruitment();
@@ -107,6 +117,14 @@ public class Main {
         showMenu();
 	}
 
+	/**
+	 * Create by: HoangThap - CMC
+	 * Create date: Jan 4, 2019
+	 * Modifier: HoangThap
+	 * Modified date: Jan 4, 2019
+	 * Description: submitCandidateToRecruitment
+	 * Version 1.0
+	 */
 	private static void submitCandidateToRecruitment() {
 		RecruitmentDAL recruitmentDAL = new RecruitmentDAL();
         CandidateDAL candidateDAL = new CandidateDAL();
@@ -147,7 +165,7 @@ public class Main {
             switch (choose) {
             case 1:
                 System.out.println("== List Experience ==");
-                listExp = expBLL.getList("SELECT * FROM nhansu.candidate where candidateType = '0';");
+                listExp = expBLL.getList(Constants.ExperienceCandidate.SHOW_EXP);
                 expBLL.show(listExp);
                 break;
             case 2:
@@ -255,7 +273,7 @@ public class Main {
             switch (choose) {
             case 1:
                 System.out.println("== List Fresher ==");
-                listIntern = fresherBLL.getList("SELECT * FROM nhansu.candidate where candidateType = '1';");
+                listIntern = fresherBLL.getList(Constants.FresherCandidate.SHOW_FRE);
                 fresherBLL.show(listIntern);
                 break;
             case 2:
@@ -368,7 +386,7 @@ public class Main {
             switch (choose) {
             case 1:
                 System.out.println("== List Intern ==");
-                listIntern = internBLL.getList("SELECT * FROM nhansu.candidate where candidateType = '2';");
+                listIntern = internBLL.getList(Constants.InternCandidate.SHOW_INTE);
                 internBLL.show(listIntern);
                 break;
             case 2:

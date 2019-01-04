@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import entity.InternCandidate;
 import utils.ConnectDB;
+import utils.Constants;
 
 
 /**
@@ -73,9 +74,8 @@ public class InternDAL implements InterfaceDAL<InternCandidate>{
     @Override
     public boolean insert(InternCandidate object) {
         Connection cnn = ConnectDB.connect();
-        String sql = "INSERT INTO `nhansu`.`candidate` (`candidateID`, `firstName`, `lastName`, `birthDate`, `address`, `phone`, `email`, `candidateType`, `majors`, `semester`, `universityName`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        try {
-            PreparedStatement pre = cnn.prepareStatement(sql);
+               try {
+            PreparedStatement pre = cnn.prepareStatement(Constants.InternCandidate.INSERT_INTE);
 
             pre.setInt(1, object.getCandidateID());
             pre.setString(2, object.getFirstName());

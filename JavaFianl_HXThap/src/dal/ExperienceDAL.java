@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import entity.ExperienceCandidate;
 import utils.ConnectDB;
+import utils.Constants;
 
 
 /**
@@ -72,9 +73,9 @@ public class ExperienceDAL implements InterfaceDAL<ExperienceCandidate> {
     @Override
     public boolean insert(ExperienceCandidate object) {
         Connection cnn = ConnectDB.connect();
-        String sql = "INSERT INTO `nhansu`.`candidate` (`candidateID`, `firstName`, `lastName`, `birthDate`, `address`, `phone`, `email`, `candidateType`, `expInYear`, `proSkill`) VALUES (?, ?, ?,?,?,?,?,?,?,?)";
+           
         try {
-            PreparedStatement prs = cnn.prepareStatement(sql);
+            PreparedStatement prs = cnn.prepareStatement(Constants.ExperienceCandidate.INSERT_EXP);
             prs.setInt(1, object.getCandidateID());
             prs.setString(2, object.getFirstName());
             prs.setString(3, object.getLastName());
@@ -90,6 +91,7 @@ public class ExperienceDAL implements InterfaceDAL<ExperienceCandidate> {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            log.error(" Loi insert ExerienceDAL...! ");
         }finally {
             try {
                 cnn.close();

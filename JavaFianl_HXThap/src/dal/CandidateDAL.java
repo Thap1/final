@@ -15,15 +15,25 @@ import org.apache.log4j.Logger;
 
 import entity.Candidate;
 import utils.ConnectDB;
+import utils.Constants;
 
 
 /**
  * @author User
- *
+ *CandidateDAL
  */
 public class CandidateDAL {
     static Logger log = Logger.getLogger(Candidate.class);
 
+    /**
+     * Create by: HoangThap - CMC
+     * Create date: Jan 4, 2019
+     * Modifier: HoangThap
+     * Modified date: Jan 4, 2019
+     * Description: getAllCandidate
+     * Version 1.0
+     * @return
+     */
     public List<Candidate> getAllCandidate() {
             new ConnectDB();
       
@@ -33,10 +43,9 @@ public class CandidateDAL {
             ResultSet resultSet = null;
             Candidate candidate = null;
 
-            String sql = "select * from Candidate";
             try {
                     statement = conn.createStatement();
-                    resultSet = statement.executeQuery(sql);
+                    resultSet = statement.executeQuery(Constants.Candidate.SHOW_ALL_CAN);
                     while (resultSet.next()) {
                             int id = resultSet.getInt("fandidateID");
                             String firstName = resultSet.getString("firstName");
@@ -67,6 +76,16 @@ public class CandidateDAL {
 
     }
 
+    /**
+     * Create by: HoangThap - CMC
+     * Create date: Jan 4, 2019
+     * Modifier: HoangThap
+     * Modified date: Jan 4, 2019
+     * Description: findCandidateByID
+     * Version 1.0
+     * @param id
+     * @return
+     */
     public Candidate findCandidateByID(int id) {
             new ConnectDB();
             
@@ -74,9 +93,9 @@ public class CandidateDAL {
             ResultSet resultSet = null;
             Candidate candidate = null;
             PreparedStatement preparedStatement = null;
-            String sql = "select CandidateType from Candidate where CandidateID = ?";
+           
             try {
-                    preparedStatement = conn.prepareStatement(sql);
+                    preparedStatement = conn.prepareStatement(Constants.Candidate.SHOW_CAN_ID);
                     preparedStatement.setInt(1, id);
                     resultSet = preparedStatement.executeQuery();
                     
